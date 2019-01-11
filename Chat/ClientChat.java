@@ -9,17 +9,17 @@ class ClientChat {
 
 		try {
 
-      BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+			BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
 
-      System.out.println("Inserisci indirizzo IP del server: ");
-      String indirizzoIP = input.readLine();
+			System.out.println("Inserisci indirizzo IP del server: ");
+			String indirizzoIP = input.readLine();
 
-      System.out.println("Inserisci numero di porta: ");
-      String numeroPorta = input.readLine();
-      int porta = Integer.parseInt(numeroPorta);
+			System.out.println("Inserisci numero di porta: ");
+			String numeroPorta = input.readLine();
+			int porta = Integer.parseInt(numeroPorta);
 
 			Socket clientSocket = new Socket(indirizzoIP, porta);
-      System.out.println("Connsesso: " + clientSocket);
+			System.out.println("Connsesso: " + clientSocket);
 
 			ClientSend sendChat = new ClientSend(clientSocket);
 			Thread threadSend =new Thread(sendChat);
@@ -30,9 +30,9 @@ class ClientChat {
 			threadReceive.start();			
 
 		}
-    catch (Exception e) {
-      System.out.println(e);
-    }
+		catch (Exception e) {
+			System.out.println(e);
+		}
 
 	}
 
@@ -40,85 +40,85 @@ class ClientChat {
 
 class ClientReceive implements Runnable{
 
-  Socket clientSocket;
+	Socket clientSocket;
 
-  public ClientReceive(Socket clientSocket){
+	public ClientReceive(Socket clientSocket){
 
-    this.clientSocket = clientSocket;
+		this.clientSocket = clientSocket;
 
-  }
+	}
 
-  public void run(){
+	public void run(){
 
-    BufferedReader reader = null;
-    String message;
+		BufferedReader reader = null;
+		String message;
 
-    try {
+		try {
 
-      reader = new BufferedReader(new InputStreamReader(this.clientSocket.getInputStream()));
+			reader = new BufferedReader(new InputStreamReader(this.clientSocket.getInputStream()));
 
-      while(true){
+			while(true){
 
-        message = reader.readLine();
+				message = reader.readLine();
 
-        if(message == null || message.equals("")){
-          break;
-        }
+				if(message == null || message.equals("")){
+				  break;
+				}
 
-        System.out.println(message);
+				System.out.println(message);
 
-      }
+			}
 
-       this.clientSocket.close();
+			this.clientSocket.close();
 
-    }
-    catch(Exception e) {
-        System.out.println(e);
-    }
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
 
-  }
+	}
 
 }
 
 
 class ClientSend implements Runnable{
 
-  Socket clientSocket;
+	Socket clientSocket;
 
-  public ClientSend(Socket clientSocket){
-    this.clientSocket = clientSocket;
-  }
+	public ClientSend(Socket clientSocket){
+		this.clientSocket = clientSocket;
+	}
 
-  public void run(){
+	public void run(){
 
-    PrintWriter writer = null;
-    BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-    String message;
+		PrintWriter writer = null;
+		BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+		String message;
 
-    try {
+		try {
 
-      writer = new PrintWriter(this.clientSocket.getOutputStream());
+			writer = new PrintWriter(this.clientSocket.getOutputStream());
 
-      while(true){
+			while(true){
 
-        message = input.readLine();
+				message = input.readLine();
 
-        writer.println(message);
-        writer.flush();
+				writer.println(message);
+				writer.flush();
 
-        if(message == null || message.equals("")){
-          break;
-        }
+				if(message == null || message.equals("")){
+				  break;
+				}
 
-      }
+			}
 
-       this.clientSocket.close();
+			this.clientSocket.close();
 
-    }
-    catch(Exception e) {
-        System.out.println(e);
-    }
+		}
+		catch(Exception e) {
+			System.out.println(e);
+		}
 
-  }
+	}
 
 }
